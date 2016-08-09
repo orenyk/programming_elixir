@@ -20,7 +20,7 @@ defmodule MyList do
   def caesar([ head | tail], n), do: [head + n | caesar(tail, n)]
 
   def span(to, to), do: [to]
-  def span(from, to), do: [from | span(from+1, to)]
+  def span(from, to) when from < to, do: [from | span(from+1, to)]
 
 end
 
@@ -30,4 +30,5 @@ IO.puts "MyList.max([1, 2, 3]) => #{MyList.max([1, 2, 3])}"
 IO.puts "MyList.caesar('ryvkve', 13) => #{MyList.caesar 'ryvkve', 13}"
 
 # ListsAndRecursion-4
-IO.puts "MyList.span(1, 10) => #{MyList.span(1, 10)}"
+IO.puts "MyList.span(-1, 10) =>"
+IO.inspect MyList.span(-1, 10)
