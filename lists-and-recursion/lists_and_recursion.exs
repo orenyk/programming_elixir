@@ -19,8 +19,15 @@ defmodule MyList do
   end
   def caesar([ head | tail], n), do: [head + n | caesar(tail, n)]
 
+  def span(to, to), do: [to]
+  def span(from, to), do: [from | span(from+1, to)]
+
 end
 
+# ListsAndRecursion-[1,2,3]
 IO.puts "MyList.mapsum [1, 2, 3], &(&1 * &1) => #{MyList.mapsum [1, 2, 3], &(&1 * &1)}"
 IO.puts "MyList.max([1, 2, 3]) => #{MyList.max([1, 2, 3])}"
 IO.puts "MyList.caesar('ryvkve', 13) => #{MyList.caesar 'ryvkve', 13}"
+
+# ListsAndRecursion-4
+IO.puts "MyList.span(1, 10) => #{MyList.span(1, 10)}"
