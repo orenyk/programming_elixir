@@ -14,6 +14,15 @@ defmodule MyEnum do
     end
   end
 
-  def split([], _), do: []
-  def split([], 0)
+  def split(list, n) when n >= 0, do: _split([], list, n)
+
+  defp _split(first, [], _), do: {first, []}
+  defp _split(first, last, 0), do: {first, last}
+  defp _split(first, [head | tail], n), do: _split(first ++ [head], tail, n-1)
+
+  def take(list, n) when n >= 0, do: _take([], list, n)
+
+  defp _take(first, [], _), do: first
+  defp _take(first, _, 0), do: first
+  defp _take(first, [head | tail], n), do: _take(first ++ [head], tail, n-1)
 end
