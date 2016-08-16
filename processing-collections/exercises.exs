@@ -11,12 +11,11 @@ end
 # ListsAndRecursion-8
 defmodule TaxMan do
   def tax(orders, tax_rates) do
-    for [id, {:ship_to, state_code}, {:net_amount, net_amount}] <- orders do
-      if List.keymember? tax_rates, state_code, 0 do
-        [id, ship_to: state_code, net_amount: net_amount, total_amount: net_amount * (1 + tax_rates[state_code])]
-      else
-        [id, ship_to: state_code, net_amount: net_amount, total_amount: net_amount]
-      end
+    for order <- orders do
+      tax_rate = Keyword.get tax_rates, order[:ship_to], 0.0
+      tax = Float.round(tax_rate * order[:net_amount], 2)
+      total_amount = order[:net_amount] + tax
+      Keyword.put order, :total_amount, total_amount
     end
   end
 end
