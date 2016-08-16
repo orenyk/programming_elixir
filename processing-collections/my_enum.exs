@@ -26,7 +26,9 @@ defmodule MyEnum do
   defp _take(first, _, 0), do: first
   defp _take(first, [head | tail], n), do: _take(first ++ [head], tail, n-1)
 
-  def flatten([]), do: []
-  def flatten([head | tail]), do: flatten(head) ++ flatten(tail)
-  def flatten(a), do: [a]
+  def flatten(list), do: _flatten(list, [])
+
+  def _flatten([h|t], tail) when is_list(h), do: _flatten(h, _flatten(t, tail))
+  def _flatten([h|t], tail), do: [h | _flatten(t, tail)]
+  def _flatten([], tail), do: tail
 end
