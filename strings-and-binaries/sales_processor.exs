@@ -22,18 +22,24 @@ defmodule SalesProcessor do
   end
 
   defp _parse_values(line) do
-    [val1, val2, val3] = _parse_line(line)
-    [String.to_integer(val1),
-     String.to_atom(_strip_colon(val2)),
-     String.to_float(val3)]
+    _parse_line(line) |> Enum.map(&_parse_value/1)
+  end
+
+  defp _parse_value(val) do
+    cond do
+      Regex.match?(~r{^\d+$}, val) -> String.to_integer(val)
+      Regex.match?(~r{^\d+\.\d+$}, val) -> String.to_float(val)
+      << ?: :: utf8, name :: binary >> = val -> String.to_atom(name)
+      true -> val
+    end
   end
 
   defp _strip_colon(str), do: String.trim_leading(str, ":")
 
   def _apply_tax(order) do
     tax_rate = Keyword.get _tax_rates, order[:ship_to], 0.0
-    tax = Float.round(tax_rate * order[:net_amount], 2)
-    total_amount = order[:net_amount] + tax
+    tax = tax_rate * order[:net_amount]
+    total_amount = Float.round(order[:net_amount] + tax, 2)
     Keyword.put order, :total_amount, total_amount
   end
 
